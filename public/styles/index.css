@@ -1,7 +1,14 @@
-:root {
-    --font-stack: "Fira Sans", sans-serif;
+@import "./variables.css";
+@import "./nav.css";
+
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
 }
 
 body {
     font-family: var(--font-stack);
+    padding: 20px;
+    background-color: var(--dark-blue);
 }

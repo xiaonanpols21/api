@@ -4,13 +4,9 @@
     <%- include('../partials/head'); %>
 </head>
 <body>
-    <ul>
-        <% data.forEach(item => { %>
-            <li>
-                <p><%= item.name %></p>
-                <img src="https://image.tmdb.org/t/p/w500/<%= item.profile_path %>">
-            </li>
-        <% }); %>
-    </ul>
+    <nav>
+        <img src="img/logo.svg" alt="Logo"/>
+        <button><img src="img/icons/user.svg" alt="User icon"></button>
+    </nav>
 </body>
 </html>
