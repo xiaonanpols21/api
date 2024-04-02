@@ -4,6 +4,13 @@
     <%- include('../partials/head'); %>
 </head>
 <body>
-    <h1>Hellow world</h1>
+    <ul>
+        <% data.forEach(item => { %>
+            <li>
+                <p><%= item.name %></p>
+                <img src="https://image.tmdb.org/t/p/w500/<%= item.profile_path %>">
+            </li>
+        <% }); %>
+    </ul>
 </body>
 </html>

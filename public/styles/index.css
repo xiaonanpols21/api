@@ -1,0 +1,7 @@
+:root {
+    --font-stack: "Fira Sans", sans-serif;
+}
+
+body {
+    font-family: var(--font-stack);
+}
