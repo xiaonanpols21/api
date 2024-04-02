@@ -2,7 +2,14 @@
     --font-stack: "Fira Sans", sans-serif;
 
     --dark-blue: #0D253F;
+    --green: #90CEA1;
+    --blue: #01B4E4;
 
     --orange: #FB7A4C;
     --pink: #F04C74;
+
+    --white: white;
+
+    --black: 0, 0, 0;
+    --rgb-blue: 1, 180, 228;
 }

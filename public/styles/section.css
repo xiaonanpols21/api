@@ -1,0 +1,24 @@
+.section {
+    display: flex;
+    justify-content: space-around;
+
+    button {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: none;
+
+        &:first-of-type {
+            background: linear-gradient(to bottom left, var(--blue), var(--green));
+        }
+
+        &:last-of-type {
+            background: linear-gradient(to bottom left, var(--orange), var(--pink));
+        }
+
+        img {
+            width: auto;
+            height: 30px;
+        }
+    }
+}
