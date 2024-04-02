@@ -2,20 +2,20 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+// Get .env file
+// Zie prompt: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#18d1b2e3c8114876b7a658672f80660f
+require('dotenv').config();
+
 // set the view engine to ejs
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-// Data aanvragen
-const api_key = "api_key=c9c582007e770d9564a6499f6e364a2a";
+// Get tmdb data
 const base_url = "https://api.themoviedb.org/3";
-const api_url = base_url + "/person/popular?language=hi-KO&page=3&" + api_key;
-//const api_url = base_url + "/person/changes" + api_key + "&language=en-US&sort_by=popularity.desc&page=1&primary_release_year=2020&with_original_language=hi|ko|";
-
-//https://api.themoviedb.org/3/person/popular?language=hi-KO&page=1&api_key=c9c582007e770d9564a6499f6e364a2a
+const api_url = base_url + "/person/popular?&page=1&" + process.env.API_Key;
 
 // API fetchen met Promise
-async function getKdrama() {
+async function getPeople() {
     return fetch(api_url)
     .then((response) => response.json())
     .then((data) => {
@@ -27,7 +27,7 @@ async function getKdrama() {
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#ecf993846c754b9cae95d048caf153b8
 app.get('/', async function(req, res) {
     try {
-        const data = await getKdrama();
+        const data = await getPeople();
 
         res.render('pages/index', {
             data

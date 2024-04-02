@@ -4,4 +4,5 @@ Voor mijn project maak ik gebruik van de TMDB API. Ik ga een app maken waarbij j
 
 ### Design
 Hier is design gemaakt waar er is gekeken naar de TMDB Huisstijl en de Tinder Huisstijl. Idee extra: Filter op geslacht en laat de gelikte mensen zien in een aparte sectie. 
+
 ![Design](https://github.com/xiaonanpols21/api/blob/main/public/img/readme/design.png)
