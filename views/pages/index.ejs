@@ -10,12 +10,21 @@
         <button aria-label="Go to your likes profile"><img src="img/icons/user.svg" alt="User icon"></button>
     </nav>
     <main>
-        <a href="">
-            <article>
-                <h2>Hee-Jeong</h2>
-                <img src="img/error-img.jpg" alt="Error image"/>
-            </article>
-        </a>
+        <% data.forEach(item => { %>
+            <a href="">
+                <article>
+                    <h2><%= item.name %></h2>
+
+                    <!-- Progress enhancement Img -->
+                    <% if(item.profile_path !== null) {%>
+                        <img src="https://image.tmdb.org/t/p/w500/<%= item.profile_path %>" alt="<%= item.name %>">
+                    <% } else { %>
+                        <img src="img/error-img.jpg" alt="Error image"/>
+                    <% } %>
+
+                </article>
+            </a>
+        <% }) %>
     </main>
     <section class="section">
         <h3 class="visually-hidden">Dislike or like</h3>
