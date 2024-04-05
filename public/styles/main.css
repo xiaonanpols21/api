@@ -1,8 +1,17 @@
 main {
+    position: relative;
+
     a {
+        position: absolute;
+        left: 0;
+        right: 0;
         display: block;
         text-decoration: none;
         color: var(--white);
+
+        /* &:nth-of-type(1) {
+            z-index: 10;
+        } */
     }
 
     article {

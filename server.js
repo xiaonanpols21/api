@@ -19,8 +19,8 @@ async function getData() {
     return fetch(api_url)
     .then((response) => response.json())
     .then((data) => {
-        console.log(data.results[0]);
-        return data.results;
+        console.log( data.results.slice(0, 3));
+        return data.results.slice(0, 3);
     });
 }
 
