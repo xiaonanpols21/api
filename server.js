@@ -15,7 +15,7 @@ const base_url = "https://api.themoviedb.org/3";
 const api_url = base_url + "/person/popular?&page=1&" + process.env.API_Key;
 
 // API fetchen met Promise
-async function getPeople() {
+async function getData() {
     return fetch(api_url)
     .then((response) => response.json())
     .then((data) => {
@@ -27,7 +27,7 @@ async function getPeople() {
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#ecf993846c754b9cae95d048caf153b8
 app.get('/', async function(req, res) {
     try {
-        const data = await getPeople();
+        const data = await getData();
 
         res.render('pages/index', {
             data
@@ -38,6 +38,10 @@ app.get('/', async function(req, res) {
         res.status(500).send('Error fetching data');
     }
 });
+
+app.get('/single', function(req, res) {
+    res.render('pages/single');
+  });
 
 // Port
 app.listen(port, () => {
