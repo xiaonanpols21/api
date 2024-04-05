@@ -8,10 +8,6 @@ main {
         display: block;
         text-decoration: none;
         color: var(--white);
-
-        /* &:nth-of-type(1) {
-            z-index: 10;
-        } */
     }
 
     article {

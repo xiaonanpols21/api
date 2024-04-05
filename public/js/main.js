@@ -53,7 +53,9 @@ function updateUI() {
         `<a href="" style="z-index: ${zIndex};">
             <article> <!-- Set the z-index -->
                 <h2>${item.name}</h2>
+
                 <img src="${item.img}" alt="${item.name}">
+                
                 <button aria-label="Go to detail page button"><img src="img/icons/arrow-blue.svg" alt="Arrow blue icon"></button>
             </article>
         </a>`;
