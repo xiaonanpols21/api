@@ -40,10 +40,12 @@ In de browser die je het volgende. De volgende stap is om te kijken om de data o
 Ik had gesproken met Cyd. Ik liet mijn werk zien van idee tot in de code. Ze gaf me tips voor het liken en het swipen voor een Tinder effect.
 
 **Liken**
+
 - Local storage
 - Paar in laden, daarna next
 
 **Swipe effect**
+
 Add eventlistener voor zelfde functie:
 
 - Touch start
