@@ -19,7 +19,7 @@ async function getPeople() {
     return fetch(api_url)
     .then((response) => response.json())
     .then((data) => {
-        console.log(data.results);
+        console.log(data.results[0]);
         return data.results;
     });
 }
