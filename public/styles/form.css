@@ -1,8 +1,8 @@
-.sec-btns {
+form {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 30px;
+    bottom: 0px;
     display: flex;
     justify-content: space-around;
 

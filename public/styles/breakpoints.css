@@ -1,6 +1,6 @@
 
 @media (min-width: 576px) {  
-    body {
+    body, .nav-single div {
         width: 550px;
         margin: auto;
     }

@@ -8,6 +8,13 @@
     background-color: var(--dark-blue);
     border-radius: 0px 0px 20px 20px;
     box-shadow: 0px 0px 20px rgba(var(--rgb-blue), 0.16);
+
+    div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
     
     h1 {
         font-size: 34px;
