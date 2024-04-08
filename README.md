@@ -51,6 +51,47 @@ main.querySelectorAll('article').forEach(article => {
 });
 ```
 
+### Versie 3
+Ik ging vragen aan Cyd wat een goede manier is om meerdere cards te laten zien als je bij de laatste bent. Zij verwees mij door naar Declan. Hij hielp mij om de buttons werkend te krijgen van client side naar server side. Van de buttons maak je een form. Als je op like of dislike klikt dan ga je naar een nieuwe pagina. 
+```html
+ <form method="POST" action="/choice">
+    <input type="hidden" name="page" value="<%= page %>" />
+    <button name="dislike" value="<%= item.id %>" type="submit" aria-label="Dislike button">
+        <img src="img/icons/cross.svg" alt="Cross icon">
+    </button>
+    <button name="like" value="<%= item.id %>" type="submit" aria-label="Like button">
+        <img src="img/icons/heart.svg" alt="Heart icon">
+    </button>
+</form>
+```
+
+Wanneer je bij die nieuwe pagina bent redirect je naar een andere pagina met de page number achter de url. 
+```js
+app.post('/choice', async function(req, res) {
+    console.log(parseInt(req.body.page) + 1)
+
+    res.redirect(`/${parseInt(req.body.page) + 1}`)
+});
+```
+
+Je refresht de pagina eigenlijk elke keer wanneer je gaat liken en disliken naar de volgende pagina. 
+```js
+app.get('/:page', async function(req, res) {
+    try {
+        const data = await getData(req.params.page);
+
+        res.render('pages/index', {
+            page: req.params.page,
+            data
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching data');
+    }
+});
+```
+
 ## Gesprekken
 ### Gesprek 1
 Ik had gesproken met Cyd. Ik liet mijn werk zien van idee tot in de code. Ze gaf me tips voor het liken en het swipen voor een Tinder effect.

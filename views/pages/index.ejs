@@ -29,6 +29,7 @@
 
     <section class="sec-btns">
         <h3 class="visually-hidden">Dislike or like</h3>
+
         <form method="POST" action="/choice">
             <input type="hidden" name="page" value="<%= page %>" />
             <button name="dislike" value="<%= item.id %>" type="submit" aria-label="Dislike button">
@@ -39,7 +40,6 @@
             </button>
         </form>
        
-        
     </section>
     <% }) %>
 </main>
