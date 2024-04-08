@@ -1,0 +1,19 @@
+.body-single {
+    padding: 0px;
+}
+
+.nav-single {
+    padding: 20px;
+    background-color: var(--dark-blue);
+    border-radius: 0px 0px 20px 20px;
+    
+    h1 {
+        font-size: 34px;
+        line-height: 37px;
+        color: var(--white);
+    }
+
+    button img {
+        height: 10px;
+    }
+}

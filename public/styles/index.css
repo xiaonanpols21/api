@@ -2,6 +2,7 @@
 @import "./nav.css";
 @import "./main.css";
 @import "./section.css";
+@import "./single.css";
 @import "./breakpoints.css";
 
 * {
