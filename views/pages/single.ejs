@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <%- include('../partials/head'); %>
-</head>
+ <%- include('../partials/head-single'); %>
 <body>
     <nav class="nav-single">
         <div>
             <h1><%= data.name %></h1>
-            <button aria-label="Go back to the people"><img src="img/icons/arrow-white.svg" alt="Arrow icon"></button>
+            <button aria-label="Go back to the people"><img src="../img/icons/arrow-white.svg" alt="Arrow icon"></button>
         </div>
     </nav>
 
     <section class="sec-single-card">
-        <h2>Man</h2>
-        <img src="img/error-img.jpg" alt="">
+        <!-- Change gender -->
+        <% if(data.gender == 2) {%>
+            <h2>Man</h2>
+        <% } else { %>
+            <h2>Woman</h2>
+         <% } %>
+        
+        <img src="https://image.tmdb.org/t/p/w500/<%= data.profile_path %>" alt="<%= data.name %>" alt="">
     </section>
 
     <main class="known">
         <h2>Known for:</h2>
-        <article>
-            <h3>Name</h3>
-            <img src="img/error-img.jpg" alt="">
-        </article>
-        <article>
-            <h3>Name</h3>
-            <img src="img/error-img.jpg" alt="">
-        </article>
+      
+
+        
+            <article>
+                <h3>test</h3>
+                <img src="../img/error-img.jpg" alt="">
+            </article>
+ 
     </main>
 </body>
 </html>

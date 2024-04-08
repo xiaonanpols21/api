@@ -13,20 +13,28 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Get tmdb url
-const base_url = "https://api.themoviedb.org/3";
-
-// API fetchen met Promise
 async function getPeople(page) {
-    const api_url = base_url + "/person/popular?&page=" + page + "&" + process.env.API_Key;
+    const api_url = "https://api.themoviedb.org/3/person/popular?&page=" + page + "&" + process.env.API_Key;
 
     return fetch(api_url)
     .then((response) => response.json())
     .then((data) => {
-        console.log( data.results.slice(0, 1));
         return data.results.slice(0, 1);
     });
 }
+
+// API fetchen met Promise
+async function getSinglePerson(id) {
+    const api_url = `https://api.themoviedb.org/3/person/${id}?${process.env.API_Key}`
+
+    return fetch(api_url)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data)
+            return data;
+        });
+}
+
 
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#ecf993846c754b9cae95d048caf153b8
 app.get('/', async function(req, res) {
@@ -66,10 +74,11 @@ app.get('/:page', async function(req, res) {
 });
 
 // Single page
-app.get('/:id', async function(req, res) {
+app.get('/person/:id', async function(req, res) {
     try {
-        const data = await getPeople(req.params.id);
+        const data = await getSinglePerson(req.params.id);
 
+        console.log(data)
         res.render('pages/single', {
             data
         });

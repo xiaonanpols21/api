@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <%- include('../partials/head'); %>
-</head>
+<%- include('../partials/head'); %>
 <body class="body-index">
     <h1 class="visually-hidden">TMDB API: Tinder look alike of actrices and actors</h1>
     <nav>
@@ -11,7 +9,7 @@
     </nav>
     <main class="cards">
         <% data.forEach(item => { %>
-            <a href="<%= item.id %>">
+            <a href="/person/<%= item.id %>">
                 <article>
                     <h2><%= item.name %></h2>
 
@@ -22,7 +20,7 @@
                         <img src="img/error-img.jpg" alt="Error image"/>
                     <% } %>
 
-                    <button aria-label="Go to detail page button "><img src="img/icons/arrow-blue.svg" alt="Arrow blue icon"></button>
+                    <button aria-label="Go to detail page button"><img src="img/icons/arrow-blue.svg" alt="Arrow blue icon"></button>
 
                 </article>
             </a>
