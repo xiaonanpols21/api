@@ -24,8 +24,12 @@ async function getPeople(page) {
 }
 
 // API fetchen met Promise
-async function getSinglePerson(id) {
-    const api_url = `https://api.themoviedb.org/3/person/${id}?${process.env.API_Key}`
+async function getSinglePerson(id, page) {
+    const api_url = `https://api.themoviedb.org/3/person/${id}?${process.env.API_Key}`;
+
+    const url = "https://api.themoviedb.org/3/person/popular?&page=" + page + "&" + process.env.API_Key;
+
+    //console.log(url)
 
     return fetch(api_url)
         .then((response) => response.json())
