@@ -9,7 +9,8 @@
     --pink: #F04C74;
 
     --white: white;
+    --black: #111317;
 
-    --black: 0, 0, 0;
+    --black-rgb: 17, 19, 23;
     --rgb-blue: 1, 180, 228;
 }

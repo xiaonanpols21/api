@@ -1,7 +1,7 @@
 @import "./variables.css";
 @import "./nav.css";
-@import "./main.css";
-@import "./section.css";
+@import "./cards.css";
+@import "./sec-btns.css";
 @import "./single.css";
 @import "./breakpoints.css";
 
@@ -18,8 +18,11 @@ body {
     gap: 30px;
     font-family: var(--font-stack);
     padding: 20px;
-    height: 100vh;
     background-color: var(--dark-blue);
+}
+
+.body-index {
+    height: 100vh;
 }
 
 .visually-hidden {

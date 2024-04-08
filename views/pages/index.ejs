@@ -3,13 +3,13 @@
 <head>
     <%- include('../partials/head'); %>
 </head>
-<body>
+<body class="body-index">
     <h1 class="visually-hidden">TMDB API: Tinder look alike of actrices and actors</h1>
     <nav>
         <img src="img/logo.svg" alt="Logo"/>
         <button aria-label="Go to your likes profile"><img src="img/icons/user.svg" alt="User icon"></button>
     </nav>
-    <main>
+    <main class="cards">
         <% data.forEach(item => { %>
             <a href="">
                 <article>
@@ -26,19 +26,23 @@
 
                 </article>
             </a>
-        <% }) %>
-    </main>
-    <section class="section">
-        <h3 class="visually-hidden">Dislike or like</h3>
 
-        <button aria-label="Dislike button">
-            <img src="img/icons/cross.svg" alt="Cross icon">
-        </button>
-        <button aria-label="Like button">
-            <img src="img/icons/heart.svg" alt="Heart icon">
-        </button>
+    <section class="sec-btns">
+        <h3 class="visually-hidden">Dislike or like</h3>
+        <form method="POST" action="/choice">
+            <input type="hidden" name="page" value="<%= page %>" />
+            <button name="dislike" value="<%= item.id %>" type="submit" aria-label="Dislike button">
+                <img src="img/icons/cross.svg" alt="Cross icon">
+            </button>
+            <button name="like" value="<%= item.id %>" type="submit" aria-label="Like button">
+                <img src="img/icons/heart.svg" alt="Heart icon">
+            </button>
+        </form>
+       
         
     </section>
+    <% }) %>
+</main>
     <script src="js/main.js"></script>
 </body>
 </html>
