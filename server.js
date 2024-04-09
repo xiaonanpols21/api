@@ -49,6 +49,7 @@ async function getPeople(page, likedPeople) {
 }
 
 
+
 // Fetch single page people
 async function getSinglePerson(id, page) {
     const api_url = `https://api.themoviedb.org/3/person/${id}?${process.env.API_Key}`;
@@ -71,13 +72,9 @@ function getLikedPeopleFromCookies(req) {
     return likedPeople;
 }
 
+// Define the function to filter liked items
 function filterLikedItems(data, likedPeople) {
-    const dataID = data[0].id;
-    if (likedPeople.some(item => item.id === dataID)) {
-        console.log("You liked this one already");
-    }
-    
-    return data;
+    return data.filter(item => !likedPeople.some(liked => liked.id === item.id));
 }
 
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#ecf993846c754b9cae95d048caf153b8
@@ -115,6 +112,16 @@ app.get('/:page', async function(req, res) {
         const likedPeople = getLikedPeopleFromCookies(req);
 
         let data = await getPeople(req.params.page, likedPeople);
+
+        // Filter out already liked items
+        data = filterLikedItems(data, likedPeople);
+
+        // If no data is available after filtering, redirect to the next page
+        if (data.length === 0) {
+            res.redirect(`/${parseInt(req.params.page) + 1}`);
+            return;
+        }
+        
 
         res.render('pages/index', {
             page: req.params.page,
