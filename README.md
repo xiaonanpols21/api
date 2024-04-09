@@ -92,6 +92,37 @@ app.get('/:page', async function(req, res) {
 });
 ```
 
+### Versie 4
+Ik heb er nu voor gezorgd dat de data wordt gefiltert op asians. Uitleg van deze code wordt gevolgd. 
+```js
+const newItem = [];
+let foundDesiredLanguage = false;
+
+data.results.forEach(person => {
+    const hasDesiredLanguage = person.known_for.some(item => {
+        return ["ko", "th", "JP", "ja", "zh"].includes(item.original_language.toLowerCase());
+    });
+
+    if (hasDesiredLanguage) {
+        newItem.push(person);
+        foundDesiredLanguage = true; 
+    }
+});
+
+let randomItem;
+
+if (newItem.length > 0) {
+    const randomIndex = Math.floor(Math.random() * newItem.length);
+    randomItem = newItem[randomIndex];
+} else if (data.results.length > 0) {
+    // If no desired language items found, select a random item from data.results
+    const randomIndex = Math.floor(Math.random() * data.results.length);
+    randomItem = data.results[randomIndex];
+}
+
+return [randomItem];
+```
+
 ## Gesprekken
 ### Gesprek 1
 Ik had gesproken met Cyd. Ik liet mijn werk zien van idee tot in de code. Ze gaf me tips voor het liken en het swipen voor een Tinder effect.
