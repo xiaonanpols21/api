@@ -18,33 +18,36 @@ app.use(cookieParser());
 
 //  Filter asians
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#8cc9fb73efee48869c62dc09215b47c1
-async function getPeople(page) {
-    const api_url = "https://api.themoviedb.org/3/person/popular?&page=" + page + "&" + process.env.API_Key;
-    
+async function getPeople(page, likedPeople) {
+    const api_url = `https://api.themoviedb.org/3/person/popular?&page=${page}&${process.env.API_Key}`;
+
     return fetch(api_url)
-    .then((response) => response.json())
-    .then((data) => {
+        .then((response) => response.json())
+        .then((data) => {
+            const asianActors = data.results.filter(person => {
+                return person.known_for.some(item => ["ko", "th", "jp", "ja", "zh"].includes(item.original_language.toLowerCase()))
+            });
 
-        const asianActors = data.results.filter(person => {
-            return person.known_for
-                .some(item => ["ko", "th", "jp", "ja", "zh"]
-                .includes(item.original_language.toLowerCase()))
+            // Filter out items already liked
+            const filteredActors = asianActors.filter(actor => {
+                return !likedPeople.some(item => item.id === actor.id);
+            });
+
+            let randomItem;
+
+            if (filteredActors.length > 0) {
+                const randomIndex = Math.floor(Math.random() * filteredActors.length);
+                randomItem = filteredActors[randomIndex];
+            } else if (data.results.length > 0) {
+                // If no desired language items found or all already liked, select a random item from data.results
+                const randomIndex = Math.floor(Math.random() * data.results.length);
+                randomItem = data.results[randomIndex];
+            }
+
+            return [randomItem];
         });
-
-        let randomItem;
-
-        if (asianActors.length > 0) {
-            const randomIndex = Math.floor(Math.random() * asianActors.length);
-            randomItem = asianActors[randomIndex];
-        } else if (data.results.length > 0) {
-            // If no desired language items found, select a random item from data.results
-            const randomIndex = Math.floor(Math.random() * data.results.length);
-            randomItem = data.results[randomIndex];
-        }
-
-        return [randomItem];
-    });
 }
+
 
 // Fetch single page people
 async function getSinglePerson(id, page) {
@@ -82,10 +85,8 @@ app.get('/', async function(req, res) {
     try {
         const likedPeople = getLikedPeopleFromCookies(req);
 
-        let data = await getPeople(1);
-        data = filterLikedItems(data, likedPeople);
+        let data = await getPeople(1, likedPeople);
 
-    
         res.render('pages/index', {
             page: 1,
             data,
@@ -113,9 +114,8 @@ app.get('/:page', async function(req, res) {
     try {
         const likedPeople = getLikedPeopleFromCookies(req);
 
-        let data = await getPeople(req.params.page);
-        data = filterLikedItems(data, likedPeople);
-        
+        let data = await getPeople(req.params.page, likedPeople);
+
         res.render('pages/index', {
             page: req.params.page,
             data,
