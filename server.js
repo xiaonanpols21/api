@@ -69,11 +69,12 @@ async function getSinglePerson(id, page) {
 app.get('/', async function(req, res) {
     try {
         const data = await getPeople(1);
-
+    
         // Cookies
         // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17?pvs=25#dea859d311134652bf95b0ea47e4018e
         const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', ''));
         console.log(likedPeople)
+
         res.render('pages/index', {
             page: 1,
             data,
@@ -90,6 +91,11 @@ app.get('/', async function(req, res) {
 app.post('/choice', async function(req, res) {
     const { like, page } = req.body;
 
+    // const likedItem = JSON.parse(req.body.like);
+    // const id = likedItem.id;
+    // const name = likedItem.name;
+    // const profile_path = likedItem.profile_path;
+
     if (like) {
         res.cookie(`liked_${like}`, true);
     }
@@ -102,6 +108,7 @@ app.get('/:page', async function(req, res) {
         const data = await getPeople(req.params.page);
         const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', ''));
         console.log(likedPeople)
+        
         res.render('pages/index', {
             page: req.params.page,
             data,
