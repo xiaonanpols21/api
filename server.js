@@ -107,33 +107,47 @@ app.post('/choice', async function(req, res) {
 });
 
 // Get the page 
+// Get the page 
 app.get('/:page', async function(req, res) {
     try {
         const likedPeople = getLikedPeopleFromCookies(req);
-
         let data = await getPeople(req.params.page, likedPeople);
 
         // Filter out already liked items
         data = filterLikedItems(data, likedPeople);
-
-        // If no data is available after filtering, redirect to the next page
-        if (data.length === 0) {
-            res.redirect(`/${parseInt(req.params.page) + 1}`);
-            return;
-        }
         
-
-        res.render('pages/index', {
-            page: req.params.page,
-            data,
-            likedPeople
-        });
+        // If no data is available after filtering, try fetching the next page
+        if (data.length === 0) {
+            const nextPage = parseInt(req.params.page) + 1;
+            const nextData = await getPeople(nextPage, likedPeople);
+            
+            // Check if there's data on the next page
+            if (nextData.length > 0) {
+                // Render the next item instead of redirecting to the next page
+                res.render('pages/index', {
+                    page: nextPage,
+                    data: nextData,
+                    likedPeople
+                });
+            } else {
+                // If no data is available on the next page either, display a message or handle the situation as needed
+                res.status(404).send('No more data available.');
+            }
+        } else {
+            // Render the current page if there are items to display
+            res.render('pages/index', {
+                page: req.params.page,
+                data,
+                likedPeople
+            });
+        }
 
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching data');
     }
 });
+
 
 
 // Single page
