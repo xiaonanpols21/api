@@ -22,8 +22,17 @@
         color: var(--white);
     }
 
-    button img {
-        height: 10px;
+    button {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        background: linear-gradient(to bottom left, var(--pink), var(--orange));
+
+        img {
+            height: 10px;
+        }
     }
 }
 
