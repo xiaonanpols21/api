@@ -5,7 +5,8 @@
     <h1 class="visually-hidden">TMDB API: Tinder look alike of actrices and actors</h1>
     <nav>
         <img src="img/logo.svg" alt="Logo"/>
-        <button aria-label="Go to your likes profile"><img src="img/icons/user.svg" alt="User icon"></button>
+        <!-- <button aria-label="Go to your likes profile"><img src="img/icons/user.svg" alt="User icon"></button> -->
+        <input type="checkbox">
     </nav>
     <main class="cards">
         <% data.forEach(item => { %>
@@ -31,24 +32,20 @@
                 <button name="dislike" value="<%= item.id %>" type="submit" aria-label="Dislike button">
                     <img src="img/icons/cross.svg" alt="Cross icon">
                 </button>
-                
-                <% if (!likedPeople.includes(item.id.toString())) { %>
-                    <button name="like" value='<%= JSON.stringify({ id: item.id, name: item.name, profile_path: item.profile_path }) %>' type="submit" aria-label="Like button">
-                        <img src="img/icons/heart.svg" alt="Heart icon">
-                    </button>
-                    
-                <% } else { %>
-                    <button name="like" type="submit" aria-label="Like button" disabled>
-                        <img src="img/icons/heart.svg" alt="Heart icon">
-                    </button>
-                <% } %>
+                <button name="like" value='<%= JSON.stringify({ id: item.id, name: item.name, profile_path: item.profile_path }) %>' type="submit" aria-label="Like button">
+                    <img src="img/icons/heart.svg" alt="Heart icon">
+                </button>
             </form>
         <% }) %>
     </main>
     <section class="liked">
-        <article>
-            
-        </article>
+        <h3>You liked:</h3>
+        <% likedArray.forEach(item => { %>
+            <article>
+                <h4><%= item.name %></h4>
+                <img src="https://image.tmdb.org/t/p/w500/<%= item.profile_path %>" alt="<%= item.name %>">
+            </article>
+        <% }) %>
     </section>
     
 </body>

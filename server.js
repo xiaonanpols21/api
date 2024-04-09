@@ -91,7 +91,8 @@ app.get('/', async function(req, res) {
         res.render('pages/index', {
             page: 1,
             data,
-            likedPeople
+            likedPeople,
+            likedArray
         });
 
     } catch (error) {
@@ -137,7 +138,8 @@ app.get('/:page', async function(req, res) {
         res.render('pages/index', {
             page: req.params.page,
             data,
-            likedPeople
+            likedPeople,
+            likedArray
         });
 
     } catch (error) {
