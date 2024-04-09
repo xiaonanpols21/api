@@ -75,6 +75,19 @@ app.get('/', async function(req, res) {
         const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', ''));
         console.log(likedPeople)
 
+        // String to array
+        // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#6de7d6a48b23493f80e0701087c68314
+        const likedArray = likedPeople.map(item => {
+            try {
+                return JSON.parse(item);
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+                return null;
+            }
+        }).filter(item => item !== null); // Remove any items that couldn't be parsed
+
+        console.log(likedArray)
+    
         res.render('pages/index', {
             page: 1,
             data,
@@ -106,8 +119,20 @@ app.post('/choice', async function(req, res) {
 app.get('/:page', async function(req, res) {
     try {
         const data = await getPeople(req.params.page);
+
         const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', ''));
-        console.log(likedPeople)
+        console.log(likedPeople);
+
+        const likedArray = likedPeople.map(item => {
+            try {
+                return JSON.parse(item);
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+                return null;
+            }
+        }).filter(item => item !== null); // Remove any items that couldn't be parsed
+
+        console.log(likedArray);
         
         res.render('pages/index', {
             page: req.params.page,
