@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const app = express();
 const port = 3000;
 
@@ -35,8 +36,8 @@ async function getPeople(page) {
             }
         });
 
-        // Select a random item from newItem if there are items
         let randomItem;
+
         if (newItem.length > 0) {
             const randomIndex = Math.floor(Math.random() * newItem.length);
             randomItem = newItem[randomIndex];
@@ -46,15 +47,11 @@ async function getPeople(page) {
             randomItem = data.results[randomIndex];
         }
 
-        console.log(randomItem);
-
         return [randomItem];
     });
 }
 
-
-
-// API fetchen met Promise
+// Fetch single page people
 async function getSinglePerson(id, page) {
     const api_url = `https://api.themoviedb.org/3/person/${id}?${process.env.API_Key}`;
 
