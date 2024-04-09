@@ -24,33 +24,20 @@ async function getPeople(page) {
     return fetch(api_url)
     .then((response) => response.json())
     .then((data) => {
-        
-        const newItem = [];
-        let foundDesiredLanguage = false;
-        
-        data.results.forEach(person => {
-            const hasDesiredLanguage = person.known_for.some(item => {
-                return ["ko", "th", "JP", "ja", "zh"].includes(item.original_language.toLowerCase());
-            });
-
-            if (hasDesiredLanguage) {
-                newItem.push(person);
-                foundDesiredLanguage = true; 
-            }
-        });
+        const asianActors = data.results.filter(actor => {
+            return actor.known_for.some(movie => ["ko", "th", "jp", "ja", "zh"].includes(movie.original_language.toLowerCase()))
+        })
 
         let randomItem;
 
-        if (newItem.length > 0) {
-            const randomIndex = Math.floor(Math.random() * newItem.length);
-            randomItem = newItem[randomIndex];
+        if (asianActors.length > 0) {
+            const randomIndex = Math.floor(Math.random() * asianActors.length);
+            randomItem = asianActors[randomIndex];
         } else if (data.results.length > 0) {
             // If no desired language items found, select a random item from data.results
             const randomIndex = Math.floor(Math.random() * data.results.length);
             randomItem = data.results[randomIndex];
         }
-
-        console.log(randomItem)
 
         return [randomItem];
     });
@@ -71,29 +58,16 @@ async function getSinglePerson(id, page) {
 app.get('/', async function(req, res) {
     try {
         const data = await getPeople(1);
-        console.log("data:", data)
+        // console.log("data:", data)
 
         // Cookies
         // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17?pvs=25#dea859d311134652bf95b0ea47e4018e
-        const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', ''));
-
-        // String to array
-        // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#6de7d6a48b23493f80e0701087c68314
-        const likedArray = likedPeople.map(item => {
-            try {
-                return JSON.parse(item);
-            } catch (error) {
-                console.error('Error parsing JSON:', error);
-                return null;
-            }
-        }).filter(item => item !== null); // Remove any items that couldn't be parsed
-
-        console.log("likedarray:", likedArray)
+        const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', '')).map(cookie => JSON.parse(cookie));
 
         // Console already liked
         // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#7e2ea1e3dac041229aeecc73c760c859
         const dataID = data[0].id; // Accessing the first item in data array
-        if (likedArray.some(item => item.id === dataID)) {
+        if (likedPeople.some(item => item.id === dataID)) {
             console.log("You liked this one already");
             // Filter out the item from data array
             //data = await getPeople(1); // Fetch a new random item
@@ -103,7 +77,6 @@ app.get('/', async function(req, res) {
             page: 1,
             data,
             likedPeople,
-            likedArray
         });
 
     } catch (error) {
@@ -133,7 +106,7 @@ app.get('/:page', async function(req, res) {
         const data = await getPeople(req.params.page);
 
         const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', ''));
-        console.log(likedPeople);
+        // console.log(likedPeople);
 
         const likedArray = likedPeople.map(item => {
             try {
@@ -144,7 +117,7 @@ app.get('/:page', async function(req, res) {
             }
         }).filter(item => item !== null); // Remove any items that couldn't be parsed
 
-        console.log(likedArray);
+        // console.log(likedArray);
         
         res.render('pages/index', {
             page: req.params.page,
