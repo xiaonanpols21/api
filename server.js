@@ -50,6 +50,8 @@ async function getPeople(page) {
             randomItem = data.results[randomIndex];
         }
 
+        console.log(randomItem)
+
         return [randomItem];
     });
 }
@@ -69,7 +71,8 @@ async function getSinglePerson(id, page) {
 app.get('/', async function(req, res) {
     try {
         const data = await getPeople(1);
-    
+        console.log("data:", data)
+
         // Cookies
         // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17?pvs=25#dea859d311134652bf95b0ea47e4018e
         const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', ''));
@@ -85,7 +88,16 @@ app.get('/', async function(req, res) {
             }
         }).filter(item => item !== null); // Remove any items that couldn't be parsed
 
-        console.log(likedArray)
+        console.log("likedarray:", likedArray)
+
+        // Console already liked
+        // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#7e2ea1e3dac041229aeecc73c760c859
+        const dataID = data[0].id; // Accessing the first item in data array
+        if (likedArray.some(item => item.id === dataID)) {
+            console.log("You liked this one already");
+            // Filter out the item from data array
+            //data = await getPeople(1); // Fetch a new random item
+        }
     
         res.render('pages/index', {
             page: 1,

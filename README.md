@@ -133,6 +133,16 @@ const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith(
 console.log(likedPeople)
 ```
 
+Ook heb ik er voor gezorgd dat de items die already geliket zijn verwijdert worden
+```js
+ // Delete already liked
+// Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#63df3380b3f94a61a5e14d367d914019
+const filteredItems = newItem.filter(item => {
+    const itemID = item.id.toString();
+    return !likedArray.includes(itemID);
+});
+```
+
 ## Gesprekken
 ### Gesprek 1
 Ik had gesproken met Cyd. Ik liet mijn werk zien van idee tot in de code. Ze gaf me tips voor het liken en het swipen voor een Tinder effect.
