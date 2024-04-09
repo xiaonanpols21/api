@@ -93,7 +93,7 @@ app.get('/:page', async function(req, res) {
 ```
 
 ### Versie 4
-Ik heb er nu voor gezorgd dat de data wordt gefiltert op asians. Uitleg van deze code wordt gevolgd. 
+Ik heb er nu voor gezorgd dat de data wordt gefilterd op asians. Uitleg van deze code wordt gevolgd.
 ```js
 const newItem = [];
 let foundDesiredLanguage = false;
@@ -121,6 +121,16 @@ if (newItem.length > 0) {
 }
 
 return [randomItem];
+```
+
+### Versie 5
+Hier worden de gelikete items opgeslagen met cookies. Uitleg van deze code wordt gevolgd.
+![v5](https://github.com/xiaonanpols21/api/blob/main/public/img/readme/v-5.png)
+```js
+// Cookies
+// Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17?pvs=25#dea859d311134652bf95b0ea47e4018e
+const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', ''));
+console.log(likedPeople)
 ```
 
 ## Gesprekken
