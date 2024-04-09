@@ -135,6 +135,38 @@ const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith(
 console.log(likedPeople)
 ```
 
+Ook heb ik er voor gezorgd dat de al gelikte items niet worden getoond:
+```js
+ // Filter out already liked items
+data = filterLikedItems(data, likedPeople);
+
+// If no data is available after filtering, try fetching the next page
+if (data.length === 0) {
+    const nextPage = parseInt(req.params.page) + 1;
+    const nextData = await getPeople(nextPage, likedPeople);
+    
+    // Check if there's data on the next page
+    if (nextData.length > 0) {
+        // Render the next item instead of redirecting to the next page
+        res.render('pages/index', {
+            page: nextPage,
+            data: nextData,
+            likedPeople
+        });
+    } else {
+        // If no data is available on the next page either, display a message or handle the situation as needed
+        res.status(404).send('No more data available.');
+    }
+} else {
+    // Render the current page if there are items to display
+    res.render('pages/index', {
+        page: req.params.page,
+        data,
+        likedPeople
+    });
+}
+```
+
 ## Gesprekken
 ### Gesprek 1
 Ik had gesproken met Cyd. Ik liet mijn werk zien van idee tot in de code. Ze gaf me tips voor het liken en het swipen voor een Tinder effect.
