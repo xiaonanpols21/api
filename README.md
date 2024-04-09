@@ -125,22 +125,14 @@ return [randomItem];
 
 ### Versie 5
 Hier worden de gelikete items opgeslagen met cookies. Uitleg van deze code wordt gevolgd.
-![v5](https://github.com/xiaonanpols21/api/blob/main/public/img/readme/v-5.png)
+
+![v5](https://github.com/xiaonanpols21/api/blob/main-5/public/img/readme/v-5.png)
+
 ```js
 // Cookies
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17?pvs=25#dea859d311134652bf95b0ea47e4018e
 const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', ''));
 console.log(likedPeople)
-```
-
-Ook heb ik er voor gezorgd dat de items die already geliket zijn verwijdert worden
-```js
- // Delete already liked
-// Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#63df3380b3f94a61a5e14d367d914019
-const filteredItems = newItem.filter(item => {
-    const itemID = item.id.toString();
-    return !likedArray.includes(itemID);
-});
 ```
 
 ## Gesprekken
