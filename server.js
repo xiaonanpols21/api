@@ -24,6 +24,7 @@ async function getPeople(page) {
     return fetch(api_url)
     .then((response) => response.json())
     .then((data) => {
+
         const asianActors = data.results.filter(actor => {
             return actor.known_for.some(movie => ["ko", "th", "jp", "ja", "zh"].includes(movie.original_language.toLowerCase()))
         })
@@ -54,15 +55,18 @@ async function getSinglePerson(id, page) {
         });
 }
 
+function getLikedPeopleFromCookies(req) {
+    return Object.keys(req.cookies)
+        .filter(cookie => cookie.startsWith('liked_'))
+        .map(cookie => cookie.replace('liked_', ''))
+        .map(cookie => JSON.parse(cookie));
+}
+
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#ecf993846c754b9cae95d048caf153b8
 app.get('/', async function(req, res) {
     try {
         const data = await getPeople(1);
-        // console.log("data:", data)
-
-        // Cookies
-        // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17?pvs=25#dea859d311134652bf95b0ea47e4018e
-        const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', '')).map(cookie => JSON.parse(cookie));
+        const likedPeople = getLikedPeopleFromCookies(req);
 
         // Console already liked
         // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#7e2ea1e3dac041229aeecc73c760c859
@@ -89,11 +93,6 @@ app.get('/', async function(req, res) {
 app.post('/choice', async function(req, res) {
     const { like, page } = req.body;
 
-    // const likedItem = JSON.parse(req.body.like);
-    // const id = likedItem.id;
-    // const name = likedItem.name;
-    // const profile_path = likedItem.profile_path;
-
     if (like) {
         res.cookie(`liked_${like}`, true);
     }
@@ -104,26 +103,12 @@ app.post('/choice', async function(req, res) {
 app.get('/:page', async function(req, res) {
     try {
         const data = await getPeople(req.params.page);
-
-        const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith('liked_')).map(cookie => cookie.replace('liked_', ''));
-        // console.log(likedPeople);
-
-        const likedArray = likedPeople.map(item => {
-            try {
-                return JSON.parse(item);
-            } catch (error) {
-                console.error('Error parsing JSON:', error);
-                return null;
-            }
-        }).filter(item => item !== null); // Remove any items that couldn't be parsed
-
-        // console.log(likedArray);
+        const likedPeople = getLikedPeopleFromCookies(req);
         
         res.render('pages/index', {
             page: req.params.page,
             data,
-            likedPeople,
-            likedArray
+            likedPeople
         });
 
     } catch (error) {
