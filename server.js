@@ -18,37 +18,33 @@ app.use(cookieParser());
 
 //  Filter asians
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#8cc9fb73efee48869c62dc09215b47c1
-async function getPeople(page, likedPeople) {
-    const api_url = `https://api.themoviedb.org/3/person/popular?&page=${page}&${process.env.API_Key}`;
-
+async function getPeople(page) {
+    const api_url = "https://api.themoviedb.org/3/person/popular?&page=" + page + "&" + process.env.API_Key;
+    
     return fetch(api_url)
-        .then((response) => response.json())
-        .then((data) => {
-            const asianActors = data.results.filter(person => {
-                return person.known_for.some(item => ["ko", "th", "jp", "ja", "zh"].includes(item.original_language.toLowerCase()))
-            });
+    .then((response) => response.json())
+    .then((data) => {
 
-            // Filter out items already liked
-            const filteredActors = asianActors.filter(actor => {
-                return !likedPeople.some(item => item.id === actor.id);
-            });
-
-            let randomItem;
-
-            if (filteredActors.length > 0) {
-                const randomIndex = Math.floor(Math.random() * filteredActors.length);
-                randomItem = filteredActors[randomIndex];
-            } else if (data.results.length > 0) {
-                // If no desired language items found or all already liked, select a random item from data.results
-                const randomIndex = Math.floor(Math.random() * data.results.length);
-                randomItem = data.results[randomIndex];
-            }
-
-            return [randomItem];
+        const asianActors = data.results.filter(person => {
+            return person.known_for
+                .some(item => ["ko", "th", "jp", "ja", "zh"]
+                .includes(item.original_language.toLowerCase()))
         });
+
+        let randomItem;
+
+        if (asianActors.length > 0) {
+            const randomIndex = Math.floor(Math.random() * asianActors.length);
+            randomItem = asianActors[randomIndex];
+        } else if (data.results.length > 0) {
+            // If no desired language items found, select a random item from data.results
+            const randomIndex = Math.floor(Math.random() * data.results.length);
+            randomItem = data.results[randomIndex];
+        }
+
+        return [randomItem];
+    });
 }
-
-
 
 // Fetch single page people
 async function getSinglePerson(id, page) {
@@ -62,19 +58,26 @@ async function getSinglePerson(id, page) {
 }
 
 function getLikedPeopleFromCookies(req) {
-    const likedPeople = Object.keys(req.cookies)
-        .filter(cookie => cookie.startsWith('liked_'))
-        .map(cookie => cookie.replace('liked_', ''))
-        .map(cookie => JSON.parse(cookie));
+    const likedPeopleCookie = req.cookies.likedPeople;
 
-    console.log({likedPeople});
-    
-    return likedPeople;
+    // If the likedPeople cookie exists and is not empty, parse its value
+    if (likedPeopleCookie) {
+        const likedPeople = JSON.parse(likedPeopleCookie);
+        console.log("Liked People from Cookie:", likedPeople);
+        return likedPeople;
+    } else {
+        return [];
+    }
 }
 
-// Define the function to filter liked items
+
 function filterLikedItems(data, likedPeople) {
-    return data.filter(item => !likedPeople.some(liked => liked.id === item.id));
+    const dataID = data[0].id;
+    if (likedPeople.some(item => item.id === dataID)) {
+        console.log("You liked this one already");
+    }
+    
+    return data;
 }
 
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#ecf993846c754b9cae95d048caf153b8
@@ -82,8 +85,10 @@ app.get('/', async function(req, res) {
     try {
         const likedPeople = getLikedPeopleFromCookies(req);
 
-        let data = await getPeople(1, likedPeople);
+        let data = await getPeople(1);
+        data = filterLikedItems(data, likedPeople);
 
+    
         res.render('pages/index', {
             page: 1,
             data,
@@ -96,58 +101,42 @@ app.get('/', async function(req, res) {
     }
 });
 
-// Get page after button clicked
+// All likes in 1 cookie
+// Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#148468b0774f4ebe8b9199720e56b3eb
 app.post('/choice', async function(req, res) {
     const { like, page } = req.body;
-
+    const likedPeople = getLikedPeopleFromCookies(req);
+    
+    // If the like button is clicked, add the liked person to the cookie
     if (like) {
-        res.cookie(`liked_${like}`, true);
+        const newLikedPerson = JSON.parse(like);
+        likedPeople.push(newLikedPerson);
+        res.cookie('likedPeople', JSON.stringify(likedPeople));
     }
+
     res.redirect(`/${parseInt(page) + 1}`);
 });
 
-// Get the page 
+
 // Get the page 
 app.get('/:page', async function(req, res) {
     try {
         const likedPeople = getLikedPeopleFromCookies(req);
-        let data = await getPeople(req.params.page, likedPeople);
 
-        // Filter out already liked items
+        let data = await getPeople(req.params.page);
         data = filterLikedItems(data, likedPeople);
         
-        // If no data is available after filtering, try fetching the next page
-        if (data.length === 0) {
-            const nextPage = parseInt(req.params.page) + 1;
-            const nextData = await getPeople(nextPage, likedPeople);
-            
-            // Check if there's data on the next page
-            if (nextData.length > 0) {
-                // Render the next item instead of redirecting to the next page
-                res.render('pages/index', {
-                    page: nextPage,
-                    data: nextData,
-                    likedPeople
-                });
-            } else {
-                // If no data is available on the next page either, display a message or handle the situation as needed
-                res.status(404).send('No more data available.');
-            }
-        } else {
-            // Render the current page if there are items to display
-            res.render('pages/index', {
-                page: req.params.page,
-                data,
-                likedPeople
-            });
-        }
+        res.render('pages/index', {
+            page: req.params.page,
+            data,
+            likedPeople
+        });
 
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching data');
     }
 });
-
 
 
 // Single page
