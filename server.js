@@ -70,24 +70,25 @@ function getLikedPeopleFromCookies(req) {
     }
 }
 
+function getDislikedPeopleFromCookies(req) {
+    const dislikedPeopleCookie = req.cookies.dislikedPeople;
 
-function filterLikedItems(data, likedPeople) {
-    const dataID = data[0].id;
-    if (likedPeople.some(item => item.id === dataID)) {
-        console.log("You liked this one already");
+    // If the dislikedPeople cookie exists and is not empty, parse its value
+    if (dislikedPeopleCookie) {
+        const dislikedPeople = JSON.parse(dislikedPeopleCookie);
+        console.log("Disliked People from Cookie:", dislikedPeople);
+        return dislikedPeople;
+    } else {
+        return [];
     }
-    
-    return data;
 }
+
 
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#ecf993846c754b9cae95d048caf153b8
 app.get('/', async function(req, res) {
     try {
         const likedPeople = getLikedPeopleFromCookies(req);
-
         let data = await getPeople(1);
-        data = filterLikedItems(data, likedPeople);
-
     
         res.render('pages/index', {
             page: 1,
@@ -103,28 +104,26 @@ app.get('/', async function(req, res) {
 
 // All likes in 1 cookie
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#148468b0774f4ebe8b9199720e56b3eb
+// Get page after button clicked
 app.post('/choice', async function(req, res) {
-    const { like, page } = req.body;
-    const likedPeople = getLikedPeopleFromCookies(req);
-    
-    // If the like button is clicked, add the liked person to the cookie
-    if (like) {
-        const newLikedPerson = JSON.parse(like);
-        likedPeople.push(newLikedPerson);
-        res.cookie('likedPeople', JSON.stringify(likedPeople));
-    }
+    const { like, dislike, page } = req.body;
 
+    if (like) {
+        // If like button is clicked, add the liked person to the likedPeople cookie
+        res.cookie(`likedPeople`, JSON.stringify([...getLikedPeopleFromCookies(req), JSON.parse(like)]));
+    } else if (dislike) {
+        // If dislike button is clicked, add the disliked person's ID to the dislikedPeople cookie
+        res.cookie(`dislikedPeople`, JSON.stringify([...getDislikedPeopleFromCookies(req), dislike]));
+    }
+    
     res.redirect(`/${parseInt(page) + 1}`);
 });
-
 
 // Get the page 
 app.get('/:page', async function(req, res) {
     try {
         const likedPeople = getLikedPeopleFromCookies(req);
-
         let data = await getPeople(req.params.page);
-        data = filterLikedItems(data, likedPeople);
         
         res.render('pages/index', {
             page: req.params.page,
@@ -153,6 +152,9 @@ app.get('/person/:id', async function(req, res) {
         res.status(500).send('Error fetching data');
     }
 });
+
+//404
+
 
 // Port
 app.listen(port, () => {
