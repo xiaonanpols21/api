@@ -88,6 +88,7 @@ function getDislikedPeopleFromCookies(req) {
 app.get('/', async function(req, res) {
     try {
         const likedPeople = getLikedPeopleFromCookies(req);
+        const dislikedPeople = getDislikedPeopleFromCookies(req);
         let data = await getPeople(1);
     
         res.render('pages/index', {
@@ -123,6 +124,7 @@ app.post('/choice', async function(req, res) {
 app.get('/:page', async function(req, res) {
     try {
         const likedPeople = getLikedPeopleFromCookies(req);
+        const dislikedPeople = getDislikedPeopleFromCookies(req);
         let data = await getPeople(req.params.page);
         
         res.render('pages/index', {
