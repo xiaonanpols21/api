@@ -19,7 +19,6 @@ app.use(cookieParser());
 //  Filter asians
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#8cc9fb73efee48869c62dc09215b47c1
 async function getPeople(page, likedPeople) {
-    console.log("Liked People in getPeople:", likedPeople);
     const api_url = "https://api.themoviedb.org/3/person/popular?&page=" + page + "&" + process.env.API_Key;
     
     return fetch(api_url)
@@ -32,17 +31,21 @@ async function getPeople(page, likedPeople) {
                 .includes(item.original_language.toLowerCase()))
         });
 
+        // Remobe liked people
+        // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#4d2a07a379f54231892ce75ac50a45b3
+        const filteredAsianActors = asianActors.filter(actor => !likedPeople.some(item => item.id === actor.id));
+
         let randomItem;
 
-        if (asianActors.length > 0) {
-            const randomIndex = Math.floor(Math.random() * asianActors.length);
-            randomItem = asianActors[randomIndex];
+        if (filteredAsianActors.length > 0) {
+            const randomIndex = Math.floor(Math.random() * filteredAsianActors.length);
+            randomItem = filteredAsianActors[randomIndex];
         } else if (data.results.length > 0) {
             // If no desired language items found, select a random item from data.results
             const randomIndex = Math.floor(Math.random() * data.results.length);
             randomItem = data.results[randomIndex];
         }
-
+        
         return [randomItem];
     });
 }
@@ -64,7 +67,6 @@ function getLikedPeopleFromCookies(req) {
     // If the likedPeople cookie exists and is not empty, parse its value
     if (likedPeopleCookie) {
         const likedPeople = JSON.parse(likedPeopleCookie);
-        console.log("Liked People from Cookie:", likedPeople);
         return likedPeople;
     } else {
         return [];
@@ -77,7 +79,6 @@ function getDislikedPeopleFromCookies(req) {
     // If the dislikedPeople cookie exists and is not empty, parse its value
     if (dislikedPeopleCookie) {
         const dislikedPeople = JSON.parse(dislikedPeopleCookie);
-        console.log("Disliked People from Cookie:", dislikedPeople);
         return dislikedPeople;
     } else {
         return [];
