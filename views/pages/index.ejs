@@ -43,12 +43,15 @@
     </main>
     <section class="liked">
         <h3>You've liked:</h3>
-        <% likedPeople.forEach(item => { %>
-            <article>
-                <h4><%= item.name %></h4>
-                <img src="https://image.tmdb.org/t/p/w500/<%= item.profile_path %>" alt="<%= item.name %>">
-            </article>
-        <% }) %>
+        <div>
+            <% likedPeople.forEach(item => { %>
+                <article>
+                    <h4><%= item.name %></h4>
+                    <img src="https://image.tmdb.org/t/p/w500/<%= item.profile_path %>" alt="<%= item.name %>">
+                </article>
+            <% }) %>
+        </div>
+        
     </section>
     
 </body>

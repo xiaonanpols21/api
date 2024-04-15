@@ -23,7 +23,7 @@ body {
 
     &:has(nav input:checked) {
         .liked {
-            display: grid;
+            display: flex;
         }
     }
 }
