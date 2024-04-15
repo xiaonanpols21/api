@@ -20,8 +20,7 @@ app.use(cookieParser());
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#8cc9fb73efee48869c62dc09215b47c1
 async function getPeople(page, likedPeople, dislikedPeople) {
     const api_url = `https://api.themoviedb.org/3/person/popular?&page=${page}&${process.env.API_Key}`;
-    console.log(dislikedPeople)
-    
+   
     return fetch(api_url)
     .then((response) => response.json())
     .then((data) => {
@@ -34,16 +33,17 @@ async function getPeople(page, likedPeople, dislikedPeople) {
 
         // Remove liked people
         // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#4d2a07a379f54231892ce75ac50a45b3
-        const filteredAsianActors = asianActors.filter(actor => !likedPeople.some(item => item.id === actor.id));
+        const clickedPeople = [...likedPeople, ...dislikedPeople];
+        const deletedPeople = asianActors.filter(actor => !clickedPeople.some(item => item.id === actor.id));
 
         let randomItem;
 
-        if (filteredAsianActors.length > 0) {
-            const randomIndex = Math.floor(Math.random() * filteredAsianActors.length);
-            randomItem = filteredAsianActors[randomIndex];
+        if (deletedPeople.length > 0) {
+            const randomIndex = Math.floor(Math.random() * deletedPeople.length);
+            randomItem = deletedPeople[randomIndex];
         } else {
             // If no desired language items found or all are liked, select a random item from data.results
-            const nonLikedResults = data.results.filter(actor => !likedPeople.some(item => item.id === actor.id));
+            const nonLikedResults = data.results.filter(actor => !clickedPeople.some(item => item.id === actor.id));
             if (nonLikedResults.length > 0) {
                 const randomIndex = Math.floor(Math.random() * nonLikedResults.length);
                 randomItem = nonLikedResults[randomIndex];
@@ -57,8 +57,6 @@ async function getPeople(page, likedPeople, dislikedPeople) {
         return [randomItem];
     });
 }
-
-
 
 // Fetch single page people
 async function getSinglePerson(id, page) {
@@ -125,7 +123,7 @@ app.post('/choice', async function(req, res) {
         res.cookie(`likedPeople`, JSON.stringify([...getLikedPeopleFromCookies(req), JSON.parse(like)]));
     } else if (dislike) {
         // If dislike button is clicked, add the disliked person's ID to the dislikedPeople cookie
-        res.cookie(`dislikedPeople`, JSON.stringify([...getDislikedPeopleFromCookies(req), dislike]));
+        res.cookie(`dislikedPeople`, JSON.stringify([...getDislikedPeopleFromCookies(req), JSON.parse(dislike)]));
     }
     
     res.redirect(`/${parseInt(page) + 1}`);
