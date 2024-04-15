@@ -83,7 +83,6 @@ function getDislikedPeopleFromCookies(req) {
     }
 }
 
-
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#ecf993846c754b9cae95d048caf153b8
 app.get('/', async function(req, res) {
     try {
@@ -138,7 +137,6 @@ app.get('/:page', async function(req, res) {
         res.status(500).send('Error fetching data');
     }
 });
-
 
 // Single page
 app.get('/person/:id', async function(req, res) {
