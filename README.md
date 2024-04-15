@@ -34,7 +34,7 @@ In de browser die je het volgende. De volgende stap is om te kijken om de data o
 ![v1](https://github.com/xiaonanpols21/api/blob/main/public/img/readme/v-1.png)
 
 ### Versie 2
-Om de data met buttons te manipuleren moet dat via de client side gebeurt worden. Ik pak de data die via de server wordt getoond. Dan pakt hij de data en stopt hij dat in een array op de client en op die manier kan ik dan liken en disliken. Uitleg van die code volgt. 
+Om de data met buttons te manipuleren moet dat via de client side gebeurt worden. Ik pak de data die via de server wordt getoond. Dan pakt hij de data en stopt hij dat in een array op de client en op die manier kan ik dan liken en disliken.
 ```js
 // Get data on client
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#b648ab4676944b0ea43517825fc9845b
@@ -93,7 +93,7 @@ app.get('/:page', async function(req, res) {
 ```
 
 ### Versie 4
-Ik heb er nu voor gezorgd dat de data wordt gefilterd op asians. Uitleg van deze code wordt gevolgd.
+Ik heb er nu voor gezorgd dat de data wordt gefilterd op asians. 
 ```js
 const newItem = [];
 let foundDesiredLanguage = false;
@@ -124,7 +124,7 @@ return [randomItem];
 ```
 
 ### Versie 5
-Hier worden de gelikete items opgeslagen met cookies. Uitleg van deze code wordt gevolgd.
+Hier worden de gelikete items opgeslagen met cookies.
 
 ![v5](https://github.com/xiaonanpols21/api/blob/main-5/public/img/readme/v-5.png)
 
@@ -135,36 +135,27 @@ const likedPeople = Object.keys(req.cookies).filter(cookie => cookie.startsWith(
 console.log(likedPeople)
 ```
 
-Ook heb ik er voor gezorgd dat de al gelikte items niet worden getoond:
-```js
- // Filter out already liked items
-data = filterLikedItems(data, likedPeople);
+### Versie 6
+Ook de disliked people worden in de cookies gezet op dezelfde huidige manier als likedPeople. 
 
-// If no data is available after filtering, try fetching the next page
-if (data.length === 0) {
-    const nextPage = parseInt(req.params.page) + 1;
-    const nextData = await getPeople(nextPage, likedPeople);
-    
-    // Check if there's data on the next page
-    if (nextData.length > 0) {
-        // Render the next item instead of redirecting to the next page
-        res.render('pages/index', {
-            page: nextPage,
-            data: nextData,
-            likedPeople
-        });
+```js
+function getDislikedPeopleFromCookies(req) {
+    const dislikedPeopleCookie = req.cookies.dislikedPeople;
+
+    // If the dislikedPeople cookie exists and is not empty, parse its value
+    if (dislikedPeopleCookie) {
+        const dislikedPeople = JSON.parse(dislikedPeopleCookie);
+        return dislikedPeople;
     } else {
-        // If no data is available on the next page either, display a message or handle the situation as needed
-        res.status(404).send('No more data available.');
+        return [];
     }
-} else {
-    // Render the current page if there are items to display
-    res.render('pages/index', {
-        page: req.params.page,
-        data,
-        likedPeople
-    });
 }
+```
+
+Nu dat de like en disliked people worden opgeslagen, Kunnen die items uit de data worden gefiltert zodat je niet steeds dezelfde mensen krijgt.
+
+```js
+const filteredAsianActors = asianActors.filter(actor => !likedPeople.some(item => item.id === actor.id));
 ```
 
 ## Gesprekken
@@ -188,3 +179,6 @@ Stop
 - Mouse up
 - Touch end
 - Touch up
+
+### Gesprek 2
+Al een tijdje heb ik een error die ik met Declan had gevonden. Ik dacht dat ik de error begreep. Maar voor nu moet ik die error negeren en verder gaan om animatie toe te voegen en ik dacht om de liked people mensen te verwijderen van de data. Declan zei toen om ook de gene te doen die je hebt gedisliket. Dus dat ga ik nu doen. 
