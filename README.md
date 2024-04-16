@@ -158,6 +158,40 @@ Nu dat de like en disliked people worden opgeslagen, Kunnen die items uit de dat
 const filteredAsianActors = asianActors.filter(actor => !likedPeople.some(item => item.id === actor.id));
 ```
 
+### Versie 7
+Ik heb met Gsap een animatie toegevoegd waarbij de card naar rechts of links gaat als je gaat liken of disliken. Gsap werkt alleen op de client side. Dus dan moet de data ook mee gegeven worden via de client side:
+
+```js
+if (likeStatus === "like") {
+        // Bron: https://gsap.com/community/forums/topic/7949-how-to-set-rotate-an-object-with-origin/
+        gsap.to(".cards a", {
+            rotate: 10,
+            duration: 0.5,
+            transformOrigin: "center bottom",
+            onComplete: () => submitForm(formData)
+        });
+    } else {
+        gsap.to(".cards a", {
+            rotate: "-10deg",
+            duration: 0.5,
+            transformOrigin: "center bottom",
+            onComplete: () => submitForm(formData)
+        });
+    }
+
+    function submitForm(formData) {
+        const page = formData.get('page')
+
+        console.log({page})
+        fetch('/choice', {method: 'POST', body: formData})
+        .then((res) => {
+            if (res.ok) {
+                window.location = `/${parseInt(page) + 1}`
+            }
+        })
+    }
+```
+
 ## Gesprekken
 ### Gesprek 1
 Ik had gesproken met Cyd. Ik liet mijn werk zien van idee tot in de code. Ze gaf me tips voor het liken en het swipen voor een Tinder effect.
