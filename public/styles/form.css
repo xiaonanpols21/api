@@ -12,6 +12,8 @@ form {
         border-radius: 50%;
         border: none;
         cursor: pointer;
+        outline: 2px solid transparent;
+        outline-offset: 5px;
         transition: .4s;
 
         &:first-of-type {
