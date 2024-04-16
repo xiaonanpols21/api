@@ -163,6 +163,20 @@ app.get('/person/:id', async function(req, res) {
     }
 });
 
+// Likes
+app.get('/user/likes', async function(req, res) {
+    try {
+        const likedPeople = getLikedPeopleFromCookies(req);
+
+        res.render('pages/likes', {
+            likedPeople
+        });
+    } catch (error) {
+
+    }
+    
+});
+
 //404
 
 

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head-single'); %>
+<body class="body-likes">
+    <nav class="nav-single">
+        <div>
+            <h1>You've liked:</h1>
+            <button aria-label="Go back to the people"><img src="../img/icons/arrow-white.svg" alt="Arrow icon"></button>
+        </div>
+    </nav>
+
+    <main class="known">
+        <div>
+            <% likedPeople.forEach(item => { %>
+                <article>
+                    <h4><%= item.name %></h4>
+                    <img src="https://image.tmdb.org/t/p/w500/<%= item.profile_path %>" alt="<%= item.name %>">
+                </article>
+            <% }) %>
+        </div>
+    </main>
+    <script src="/js/index.js"></script>
+</body>
+</html>
