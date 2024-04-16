@@ -11,22 +11,30 @@ form {
         height: 80px;
         border-radius: 50%;
         border: none;
+        cursor: pointer;
+        transition: .4s;
 
         &:first-of-type {
             background: linear-gradient(to bottom left, var(--blue), var(--green));
+
+            &:hover {
+                outline: 2px solid var(--blue);
+                outline-offset: 5px;
+            }
         }
 
         &:last-of-type {
             background: linear-gradient(to bottom left, var(--orange), var(--pink));
+
+            &:hover {
+                outline: 2px solid var(--orange);
+                outline-offset: 5px;
+            }
         }
 
         img {
             width: auto;
             height: 30px;
-        }
-
-        &:disabled {
-            opacity: 0.5;
         }
     }
 }

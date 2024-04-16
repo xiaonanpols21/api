@@ -29,8 +29,27 @@
         border: none;
         border-radius: 50%;
         background: linear-gradient(to bottom left, var(--pink), var(--orange));
+        cursor: pointer;
+
+        &::before {
+            position: absolute;
+            content: '';
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            border-radius: 40px;
+            background: linear-gradient(to bottom left, var(--blue), var(--green));
+            transition: .4s;
+            opacity: 0;
+        }
+
+        &:hover::before {
+            opacity: 1;
+        }
 
         img {
+            position: relative;
             height: 10px;
         }
     }
