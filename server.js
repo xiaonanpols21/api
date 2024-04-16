@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const multer = require("multer");
+const upload = multer();
 
 const app = express();
 const port = 3000;
@@ -115,15 +117,18 @@ app.get('/', async function(req, res) {
 // All likes in 1 cookie
 // Zie prompts: https://chemical-bunny-323.notion.site/API-Chat-GPT-Doc-372f65d6b2a5497a86b02ed94edffe17#148468b0774f4ebe8b9199720e56b3eb
 // Get page after button clicked
-app.post('/choice', async function(req, res) {
+app.post('/choice', upload.none(), async function(req, res) {
     const { like, dislike, page } = req.body;
-
+    console.log('gets here');
+    console.log({like, dislike, page});
     if (like) {
         // If like button is clicked, add the liked person to the likedPeople cookie
         res.cookie(`likedPeople`, JSON.stringify([...getLikedPeopleFromCookies(req), JSON.parse(like)]));
+        console.log('like');
     } else if (dislike) {
         // If dislike button is clicked, add the disliked person's ID to the dislikedPeople cookie
         res.cookie(`dislikedPeople`, JSON.stringify([...getDislikedPeopleFromCookies(req), JSON.parse(dislike)]));
+        console.log('dislike');
     }
     
     res.redirect(`/${parseInt(page) + 1}`);

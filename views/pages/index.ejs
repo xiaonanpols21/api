@@ -25,17 +25,19 @@
                 </article>
             </a>
 
-            <form method="POST" action="/choice">
+            <form class="like-form" method="POST" action="/choice">
                 <input type="hidden" name="page" value="<%= page %>" />
 
-                <button name="dislike" value="<%= JSON.stringify({ id: item.id, name: item.name }) %>" type="submit" aria-label="Dislike button">
+                <button class="dislike" name="dislike" data-id="<%=item.id%>" data-name="<%=item.name%>" value="<%= JSON.stringify({ id: item.id, name: item.name }) %>" type="submit" aria-label="Dislike button">
                     <img src="img/icons/cross.svg" alt="Cross icon">
                 </button>
-                <button name="like" value='<%= JSON.stringify({ id: item.id, name: item.name, profile_path: item.profile_path }) %>' type="submit" aria-label="Like button">
+                <button class="like" name="like" data-id="<%=item.id%>" data-name="<%=item.name%>" data-profile_path="<%=item.profile_path%>" value='<%= JSON.stringify({ id: item.id, name: item.name, profile_path: item.profile_path }) %>' type="submit" aria-label="Like button">
                     <img src="img/icons/heart.svg" alt="Heart icon">
                 </button>
             </form>
         <% }) %>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script type="module" src="/js/animation.js"></script>
 </body>
 </html>
