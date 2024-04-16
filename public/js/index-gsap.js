@@ -7,7 +7,6 @@ form.addEventListener("submit", function (e) {
     // gsap on complete en dan submit
     const formData = new FormData(e.currentTarget)
 
-
     const likeObject = {
         id: e.submitter.dataset.id,
         name: e.submitter.dataset.name,
