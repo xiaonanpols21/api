@@ -14,7 +14,14 @@
             <% likedPeople.forEach(item => { %>
                 <article>
                     <h4><%= item.name %></h4>
-                    <img src="https://image.tmdb.org/t/p/w500/<%= item.profile_path %>" alt="<%= item.name %>">
+                   
+                    <!-- Progress enhancement Img -->
+                    <% if(item.profile_path !== null) {%>
+                        <img src="https://image.tmdb.org/t/p/w500/<%= item.profile_path %>" alt="<%= item.name %>">
+                    <% } else { %>
+                        <img src="img/error-img.jpg" alt="Error image"/>
+                    <% } %>
+
                 </article>
             <% }) %>
         </div>
