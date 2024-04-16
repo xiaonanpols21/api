@@ -3,7 +3,6 @@
 @import "./cards.css";
 @import "./form.css";
 @import "./single.css";
-@import "./liked.css";
 @import "./likes.css";
 @import "./breakpoints.css";
 
@@ -21,12 +20,6 @@ body {
     font-family: var(--font-stack);
     padding: 20px;
     background-color: var(--dark-blue);
-
-    &:has(nav input:checked) {
-        .liked {
-            display: flex;
-        }
-    }
 }
 
 .body-index {

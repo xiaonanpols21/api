@@ -5,11 +5,7 @@
     <h1 class="visually-hidden">TMDB API: Tinder look alike of actrices and actors</h1>
     <nav>
         <img src="img/logo.svg" alt="Logo"/>
-        <!-- <button aria-label="Go to your likes profile"><img src="img/icons/user.svg" alt="User icon"></button> -->
-        <label>
-            <input type="checkbox">
-            <img src="img/icons/user.svg" alt="User icon">
-        </label>
+        <a href="/user/likes"><img src="img/icons/user.svg" alt="User icon"></a>
     </nav>
     <main class="cards">
         <% data.forEach(item => { %>
@@ -41,18 +37,5 @@
             </form>
         <% }) %>
     </main>
-    <section class="liked">
-        <h3>You've liked:</h3>
-        <div>
-            <% likedPeople.forEach(item => { %>
-                <article>
-                    <h4><%= item.name %></h4>
-                    <img src="https://image.tmdb.org/t/p/w500/<%= item.profile_path %>" alt="<%= item.name %>">
-                </article>
-            <% }) %>
-        </div>
-        
-    </section>
-    
 </body>
 </html>
