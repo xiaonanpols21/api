@@ -220,4 +220,4 @@ Stop
 Al een tijdje heb ik een error die ik met Declan had gevonden. Ik dacht dat ik de error begreep. Maar voor nu moet ik die error negeren en verder gaan om animatie toe te voegen en ik dacht om de liked people mensen te verwijderen van de data. Declan zei toen om ook de gene te doen die je hebt gedisliket. Dus dat ga ik nu doen. 
 
 ### Gesprek 3
-Ik liet mijn werk aan Cyd zien. Ik liet de nieuwe animation zien die ik had gemaakt met Gsap. Bij de liked page komen de mensen 1 voor 1 in beeld. Dit heb ik in een foreach staan. Cyd zei dat ik dit ook met trigger kan doen. Daar kan ik nog naar kijken eventueel.
+Ik liet mijn werk aan Cyd zien. Ik liet de nieuwe animation zien die ik had gemaakt met Gsap. Bij de liked page komen de mensen 1 voor 1 in beeld. Dit heb ik in een foreach staan. Cyd zei dat ik dit ook met stagger kan doen. Die heb ik toegevoegd. 
