@@ -1,4 +1,6 @@
 # API
+Alle code van de [server.js](https://github.com/xiaonanpols21/api/wiki/Server.js) en [index-gsap.js](https://github.com/xiaonanpols21/api/wiki/Index%E2%80%90gsap.js) wordt in de [Wiki](https://github.com/xiaonanpols21/api/wiki) uitgelegd:
+
 ## Concept
 Voor mijn project maak ik gebruik van de TMDB API. Ik ga een app maken waarbij je de acteurs en actrices kan liken en disliken. Dus het is een Tinder variant met acteurs en actrices. 
 
