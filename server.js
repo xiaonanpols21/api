@@ -186,9 +186,6 @@ app.get('/user/likes', async function(req, res) {
     
 });
 
-//404
-
-
 // Port
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
